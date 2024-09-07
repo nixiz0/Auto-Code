@@ -133,5 +133,12 @@ def auto_code(code, lang, model_use, session_state_updated):
 
             if stderror_output == '':
                 st.sidebar.success("Ok 😊")
+                with open("temp_script.py", "rb") as file:
+                    st.sidebar.download_button(
+                        label="Télécharger le script corrigé" if lang == 'Fr' else "Download the corrected script",
+                        data=file,
+                        file_name="temp_script.py",
+                        mime="text/x-python"
+                    )
                 return f"Script corrigé avec succès:\n{generated_code}" if lang == 'Fr' else f"Script corrected successfully:\n{generated_code}"
             
