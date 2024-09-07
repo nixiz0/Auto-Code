@@ -1,0 +1,14 @@
+# Environnement
+__pycache__
+.env
+
+# User History
+conversation_history
+
+# Temp Modelfile for model
+temp_modelfile
+
+# Temp env for python code testing
+temp_env
+temp_script.py
+
