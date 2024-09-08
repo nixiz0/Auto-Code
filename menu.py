@@ -49,13 +49,13 @@ if new_session:
     session_state_updated = st.session_state[session_name]
 
 # Text field for prompt
-prompt = st.text_input("Entrez votre prompt:")
+prompt = st.text_input("Entrez votre prompt:" if lang == 'Fr' else "Enter your prompt:")
 
 # Initialize the code variable with the latest content
 code = ""
 
 # Button to generate the code
-if st.button("Générer le code"):
+if st.button("Générer le code" if lang == 'Fr' else "Generate the code"):
     generated_code = llm_prompt(prompt, lang, model_use, session_state_updated)
 
 # Show "RUN" button only if code is generated
