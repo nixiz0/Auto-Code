@@ -1,7 +1,8 @@
-import streamlit as st 
-from streamlit_ace import st_ace
+import streamlit as st
 import platform
-import os 
+import json
+import os
+from streamlit_ace import st_ace
 
 from functions.page_title import set_page_title
 from functions.get_model import get_model_names
@@ -14,6 +15,9 @@ from functions.assistant.auto_code_mode import auto_code
 
 # -------- SESSION STATE & HISTORY DECLARATION --------
 session_name = 'session_state'
+history_dir = "code_history"
+if not os.path.exists(history_dir):
+    os.makedirs(history_dir)
 
 # Initialize 'session_state' with an empty list for messages
 if session_name not in st.session_state:
@@ -41,6 +45,11 @@ model_names = get_model_names()
 model_names.insert(0, "")
 model_use = st.sidebar.selectbox('🔬 Modèles' if lang == "Fr" else '🔬 Models', model_names)
 
+# Add a picker to choose a chat history file
+history_files = os.listdir(history_dir)
+selected_file = st.sidebar.selectbox("Historique de conversation" if lang == 'Fr' else 
+                                     "Conversation history file", [""] + history_files)
+
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
 new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
@@ -48,32 +57,45 @@ if new_session:
     st.session_state[session_name] = []
     session_state_updated = st.session_state[session_name]
 
-# Text field for prompt
-prompt = st.text_input("Entrez votre prompt:" if lang == 'Fr' else "Enter your prompt:")
+if not selected_file:
+    # Text field for prompt
+    prompt = st.text_input("Entrez votre prompt:" if lang == 'Fr' else "Enter your prompt:")
 
-# Initialize the code variable with the latest content
-code = ""
+    # Initialize the code variable with the latest content
+    code = ""
 
-# Button to generate the code
-if st.button("Générer le code" if lang == 'Fr' else "Generate the code"):
-    generated_code = llm_prompt(prompt, lang, model_use, session_state_updated)
+    # Button to generate the code
+    if st.button("Générer le code" if lang == 'Fr' else "Generate the code"):
+        generated_code = llm_prompt(prompt, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
 
-# Show "RUN" button only if code is generated
-if session_state_updated and session_state_updated[-1]['role'] == 'assistant':
-    code = session_state_updated[-1]["content"]
+    # Show "RUN" button only if code is generated
+    if session_state_updated and session_state_updated[-1]['role'] == 'assistant':
+        code = session_state_updated[-1]["content"]
 
-if code != "":
-    # Use columns for layout
-    run_btn, code_editor = st.columns([1, 15])
+    if code != "":
+        # Use columns for layout
+        run_btn, code_editor = st.columns([1, 15])
 
-    with code_editor:
-        code = st_ace(value=code, language='python', theme='cobalt', height=500)
+        with code_editor:
+            code = st_ace(value=code, language='python', theme='cobalt', height=500)
 
-    with run_btn:
-        # Button to run the code
-        if st.button("▶️"):
-            output = auto_code(code, lang, model_use, session_state_updated)
-            st.sidebar.text_area("Terminal Output:", output, height=200)
+        with run_btn:
+            # Button to run the code
+            if st.button("▶️"):
+                output = auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
+                st.sidebar.text_area("Terminal Output:", output, height=200)
+
+if selected_file:
+    with open(os.path.join(history_dir, selected_file), "r", encoding="utf8") as f:
+        st.session_state['session_state'] = json.load(f)
+
+    # Show all previous posts
+    for message in st.session_state[session_name]:
+        if message["role"] == "assistant":
+            st.code(message["content"])
+        else:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
 
 # print(f"\n\n\n\n{session_state_updated}") # Check all the message history during the session
 

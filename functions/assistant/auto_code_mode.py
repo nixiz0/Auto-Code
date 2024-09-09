@@ -8,7 +8,7 @@ from functions.assistant.env_management.run_script import run_script
 from functions.assistant.llm import llm_prompt
 
 
-def auto_code(code, lang, model_use, session_state_updated):
+def auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir):
     del_temp_env_and_script()
     lib = auto_lib_detect(code, ALREADY_IN_PYTHON, MODULE_TO_PIP)
     pip_installer(lib, code)
@@ -28,7 +28,7 @@ def auto_code(code, lang, model_use, session_state_updated):
             preprompt = f"Le code ne fonctionne pas j'ai cette erreur, corrige le code:\n{code}\n\n{stderror_output}" if lang == 'Fr' else \
                         f"The code doesn't work I have this error, correct the code:\n{code}\n\n{stderror_output}"
             
-            generated_code = llm_prompt(preprompt, lang, model_use, session_state_updated)
+            generated_code = llm_prompt(preprompt, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
             print(f"---------------------------> {generated_code}") # Check the generate LLM Code
 
             del_temp_env_and_script()

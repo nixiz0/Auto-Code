@@ -2,8 +2,10 @@ import streamlit as st
 import ollama 
 import re
 
+from functions.assistant.history_management.save_history import create_and_save_history
 
-def llm_prompt(prompt, lang, model_use, session_state_updated):
+
+def llm_prompt(prompt, lang, model_use, session_state_updated, selected_file, session_name, history_dir):
     if prompt:
         # Add user's message to message list
         session_state_updated.append({
@@ -28,5 +30,8 @@ def llm_prompt(prompt, lang, model_use, session_state_updated):
                 "role": "assistant",
                 "content": response,
             })
+
+            # Save in new json file if first prompt or an already existing json and add updated prompt
+            selected_file = create_and_save_history(session_state_updated, selected_file, history_dir, session_name)
 
             return response

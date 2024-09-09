@@ -2,8 +2,8 @@
 __pycache__
 .env
 
-# User History
-conversation_history
+# User Code History
+code_history
 
 # Temp Modelfile for model
 temp_modelfile
