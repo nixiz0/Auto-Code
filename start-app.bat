@@ -3,6 +3,8 @@
 REM Change to the directory where the script is located
 cd /d %~dp0
 
+color a 
+
 REM Creation, installation & activation of local env
 IF NOT EXIST .env (
     echo Creation of the environment...
