@@ -1,12 +1,18 @@
-import ast 
+import ast
 
 
 def auto_lib_detect(code, already_in_python, module_to_pip):
     # Initialize an empty set to store the libraries
     libs = set()
 
-    # Parse the code into an AST
-    tree = ast.parse(code)
+    try:
+        # Try to parse the code into an AST
+        tree = ast.parse(code)
+    except SyntaxError as e:
+        print(f"Syntax Code Error detected: {e}")
+        
+        # Return an empty string if there is a syntax error
+        return ""
 
     # Traverse the AST to find import statements
     for node in ast.walk(tree):
@@ -22,6 +28,6 @@ def auto_lib_detect(code, already_in_python, module_to_pip):
 
     # Convert the set to a space-separated string
     lib = ' '.join(libs)
-    print(f"LIB DETECTED: {lib}") # Check if the lib are recover
+    print(f"LIB DETECTED: {lib}")  # Check if the libs are recovered
 
     return lib
