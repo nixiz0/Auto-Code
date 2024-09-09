@@ -8,6 +8,7 @@ from functions.page_title import set_page_title
 from functions.get_model import get_model_names
 from functions.assistant.llm import llm_prompt
 from functions.assistant.auto_code_mode import auto_code
+from functions.assistant.history_management.btn_history import AppButton
 
 
 # -------- SESSION STATE & HISTORY DECLARATION --------
@@ -47,8 +48,15 @@ history_files = os.listdir(history_dir)
 selected_file = st.sidebar.selectbox("Historique de conversation" if lang == 'Fr' else 
                                      "Conversation history file", [""] + history_files)
 
+if not st.session_state[session_name] == []:
+    app_btn = AppButton(lang, history_dir, selected_file, session_name)
+    app_btn.rename_file()
+    app_btn.download_as_csv()
+    app_btn.delete_file()
+
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
+# -------- AUTO-CODE + PROMPT --------
 new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
 if new_session:
     st.session_state[session_name] = []
@@ -82,7 +90,9 @@ if not selected_file:
                 output = auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
                 st.sidebar.text_area("Terminal Output:", output, height=200)
 
+# -------- LOAD CODE HISTORY --------
 if selected_file:
+    # Recover json load file if the user select and load a json
     with open(os.path.join(history_dir, selected_file), "r", encoding="utf8") as f:
         st.session_state['session_state'] = json.load(f)
 
@@ -93,8 +103,6 @@ if selected_file:
         else:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
-
-# print(f"\n\n\n\n{session_state_updated}") # Check all the message history during the session
 
 # Use the function to set the page title
 set_page_title("Menu · Streamlit", "🤖 Auto-Code")
