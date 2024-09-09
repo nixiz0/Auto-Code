@@ -10,9 +10,6 @@ from functions.assistant.llm import llm_prompt
 from functions.assistant.auto_code_mode import auto_code
 
 
-# DONT FORGET SESSION STATE UPDATED HAVE ALL THE HISTORY 
-# CONVERSATION FOR THE ACTUAL SESSION
-
 # -------- SESSION STATE & HISTORY DECLARATION --------
 session_name = 'session_state'
 history_dir = "code_history"
