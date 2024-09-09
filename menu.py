@@ -8,6 +8,7 @@ from functions.page_title import set_page_title
 from functions.get_model import get_model_names
 from functions.assistant.llm import llm_prompt
 from functions.assistant.auto_code_mode import auto_code
+from functions.assistant.history_management.load_history import load_code_history
 from functions.assistant.history_management.btn_history import AppButton
 
 
@@ -46,7 +47,7 @@ model_use = st.sidebar.selectbox('🔬 Modèles' if lang == "Fr" else '🔬 Mode
 # Add a picker to choose a chat history file
 history_files = os.listdir(history_dir)
 selected_file = st.sidebar.selectbox("Historique de conversation" if lang == 'Fr' else 
-                                     "Conversation history file", [""] + history_files)
+                                     "Conversation history file", [""] + history_files, key="selected_file")
 
 if not st.session_state[session_name] == []:
     app_btn = AppButton(lang, history_dir, selected_file, session_name)
@@ -61,6 +62,7 @@ new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
 if new_session:
     st.session_state[session_name] = []
     session_state_updated = st.session_state[session_name]
+    st.rerun()
 
 if not selected_file:
     # Text field for prompt
@@ -92,17 +94,7 @@ if not selected_file:
 
 # -------- LOAD CODE HISTORY --------
 if selected_file:
-    # Recover json load file if the user select and load a json
-    with open(os.path.join(history_dir, selected_file), "r", encoding="utf8") as f:
-        st.session_state['session_state'] = json.load(f)
-
-    # Show all previous posts
-    for message in st.session_state[session_name]:
-        if message["role"] == "assistant":
-            st.code(message["content"])
-        else:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
+    load_code_history(history_dir, selected_file, session_name)
 
 # Use the function to set the page title
 set_page_title("Menu · Streamlit", "🤖 Auto-Code")
