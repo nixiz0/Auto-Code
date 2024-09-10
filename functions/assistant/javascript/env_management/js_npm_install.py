@@ -9,14 +9,14 @@ def install_libraries(libraries):
     temp_dir = os.path.join(TEMP_ENV_PATH)
     os.makedirs(temp_dir, exist_ok=True)
     
-    # Vérifiez si npm est installé
+    # Check if npm is installed
     if shutil.which('npm') is None:
-        raise EnvironmentError("npm n'est pas installé ou n'est pas dans le PATH.")
+        raise EnvironmentError("npm is not installed or is not in the PATH.")
     
-    # Initialiser un projet Node.js dans le répertoire temporaire
+    # Initialize a Node.js project in the temporary directory
     subprocess.run(['npm', 'init', '-y'], cwd=temp_dir, shell=True)
     
-    # Construire la commande npm install avec toutes les librairies
+    # Build the npm install command with all libraries
     install_command = ['npm', 'install'] + list(libraries)
     subprocess.run(install_command, cwd=temp_dir, shell=True)
     

@@ -6,7 +6,7 @@ def run_script(code, env_dir, script_path):
     with open("temp_script.py", "w", encoding='utf-8') as f:
         f.write(code)
 
-    # Vérifie si l'environnement virtuel existe
+    # Checks if the virtual environment exists
     if os.path.exists(env_dir):
         python_path = os.path.join(env_dir, 'Scripts', 'python.exe')
     else:
