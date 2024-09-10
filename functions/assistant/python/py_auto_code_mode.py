@@ -11,9 +11,10 @@ from functions.assistant.llm import llm_prompt
 def py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir):
     del_temp_env_and_script()
     lib = auto_lib_detect(code, ALREADY_IN_PYTHON, MODULE_TO_PIP)
-    pip_installer(lib, code)
+    if lib:
+        pip_installer(lib)
     
-    result, stdout_output, stderror_output = run_script(TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
+    result, stdout_output, stderror_output = run_script(code, TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
     print(result) # Check the process
 
     # -------- RECOVER ERROR LOGIC HERE --------   
@@ -33,9 +34,10 @@ def py_auto_code(code, lang, model_use, session_state_updated, selected_file, se
 
             del_temp_env_and_script()
             lib = auto_lib_detect(generated_code, ALREADY_IN_PYTHON, MODULE_TO_PIP)
-            pip_installer(lib, generated_code)
+            if lib:
+                pip_installer(lib)
             
-            result, stdout_output, stderror_output = run_script(TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
+            result, stdout_output, stderror_output = run_script(code, TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
             print(result) # Check the process
 
             if stderror_output == '':
