@@ -57,13 +57,13 @@ if not st.session_state[session_name] == []:
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
 # -------- AUTO-CODE + PROMPT --------
-new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
-if new_session:
-    st.session_state[session_name] = []
-    session_state_updated = st.session_state[session_name]
-    st.rerun()
-
 if not selected_file:
+    new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
+    if new_session:
+        st.session_state[session_name] = []
+        session_state_updated = st.session_state[session_name]
+        st.rerun()
+
     # Text field for prompt
     prompt = st.text_input("Entrez votre prompt:" if lang == 'Fr' else "Enter your prompt:")
 
