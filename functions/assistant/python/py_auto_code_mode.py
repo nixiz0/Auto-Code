@@ -1,14 +1,14 @@
 import streamlit as st
 
-from functions.assistant.env_management._const_env import *
-from functions.assistant.env_management.del_env import del_temp_env_and_script
-from functions.assistant.env_management.auto_lib import auto_lib_detect
-from functions.assistant.env_management.pip_install import pip_installer
-from functions.assistant.env_management.run_script import run_script
+from functions.assistant.python.env_management._py_const_env import *
+from functions.assistant.python.env_management.py_del_env import del_temp_env_and_script
+from functions.assistant.python.env_management.py_auto_lib import auto_lib_detect
+from functions.assistant.python.env_management.py_pip_install import pip_installer
+from functions.assistant.python.env_management.py_run_script import run_script
 from functions.assistant.llm import llm_prompt
 
 
-def auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir):
+def py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir):
     del_temp_env_and_script()
     lib = auto_lib_detect(code, ALREADY_IN_PYTHON, MODULE_TO_PIP)
     pip_installer(lib, code)

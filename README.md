@@ -11,6 +11,8 @@ Run the **start-app.bat** and it will automatically install the application.
 
 => You need to **install Python 3.11.7** here : https://www.python.org/downloads/release/python-3117/
 
+=> You need to **install Npm** here : https://nodejs.org/en/download/prebuilt-installer
+
 
 ## Author
 

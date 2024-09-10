@@ -1,5 +1,7 @@
-from functions.assistant.env_management.create_env import create_virtualenv, install_requirements
-from functions.assistant.env_management._const_env import *
+import os
+
+from functions.assistant.python.env_management.py_create_env import create_virtualenv, install_requirements
+from functions.assistant.python.env_management._py_const_env import *
 
 
 def pip_installer(lib, code):

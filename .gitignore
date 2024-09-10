@@ -9,6 +9,10 @@ code_history
 temp_modelfile
 
 # Temp env for python code testing
-temp_env
+py_temp_env
 temp_script.py
+
+# Temp js 
+js_temp_env
+temp_script.js
 

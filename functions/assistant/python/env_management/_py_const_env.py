@@ -1,4 +1,4 @@
-TEMP_ENV_PATH = "temp_env"
+TEMP_ENV_PATH = "py_temp_env"
 TEMP_SCRIPT_PATH = "temp_script.py"
 
 ALREADY_IN_PYTHON = {

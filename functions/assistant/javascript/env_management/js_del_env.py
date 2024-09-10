@@ -1,6 +1,6 @@
 import shutil
 import os
-from functions.assistant.env_management._const_env import *
+from functions.assistant.javascript.env_management._js_const_env import *
 
 
 def del_temp_env_and_script():

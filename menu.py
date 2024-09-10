@@ -6,7 +6,8 @@ from streamlit_ace import st_ace
 from functions.page_title import set_page_title
 from functions.get_model import get_model_names
 from functions.assistant.llm import llm_prompt
-from functions.assistant.auto_code_mode import auto_code
+from functions.assistant.python.py_auto_code_mode import py_auto_code
+from functions.assistant.javascript.js_auto_code_mode import js_auto_code
 from functions.assistant.history_management.load_history import load_code_history
 from functions.assistant.history_management.btn_history import AppButton
 
@@ -56,6 +57,9 @@ if not st.session_state[session_name] == []:
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
+code_lang = ['python', 'javascript', 'sql']
+code_language = st.selectbox('Langage Code' if lang == "Fr" else 'Code Language', code_lang)
+
 # -------- AUTO-CODE + PROMPT --------
 if not selected_file:
     new_session = st.sidebar.button("Nouveau" if lang == 'Fr' else "New")
@@ -73,6 +77,7 @@ if not selected_file:
     # Button to generate the code
     if st.button("Générer le code" if lang == 'Fr' else "Generate the code"):
         generated_code = llm_prompt(prompt, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
+        st.rerun()
 
     # Show "RUN" button only if code is generated
     if session_state_updated and session_state_updated[-1]['role'] == 'assistant':
@@ -83,17 +88,25 @@ if not selected_file:
         run_btn, code_editor = st.columns([1, 15])
 
         with code_editor:
-            code = st_ace(value=code, language='python', theme='cobalt', height=500)
+            code = st_ace(value=code, language=code_language, theme='cobalt', height=500)
 
         with run_btn:
             # Button to run the code
             if st.button("▶️"):
-                output = auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
+                if code_language == 'python':
+                    output = py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
+                elif code_language == 'javascript':
+                    output = js_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir) 
+                elif code_language == 'sql':
+                    pass
+                else: 
+                    output = "Ce langage de programmation n'est pas pris en compte" if lang == 'Fr' else \
+                             "This programming language is not taken into account"
                 st.sidebar.text_area("Terminal Output:", output, height=200)
 
 # -------- LOAD CODE HISTORY --------
 if selected_file:
-    load_code_history(history_dir, selected_file, session_name)
+    load_code_history(history_dir, selected_file, session_name, code_language)
 
 # Use the function to set the page title
 set_page_title("Menu · Streamlit", "🤖 Auto-Code")
