@@ -7,7 +7,9 @@ Project allowing to **self-correct** a code generated or imported in **python**,
 
 Run the **start-app.bat** and it will automatically install the application.
 
-=> You juste need to **install Ollama** first here : https://ollama.com/
+=> You need to **install Ollama** here : https://ollama.com/
+
+=> You need to **install Python 3.11.7** here : https://www.python.org/downloads/release/python-3117/
 
 
 ## Author
