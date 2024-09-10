@@ -36,7 +36,7 @@ def js_auto_code(code, lang, model_use, session_state_updated, selected_file, se
             if lib:
                 install_libraries(lib)
             
-            result, stdout_output, stderror_output = run_js_script(code)
+            result, stdout_output, stderror_output = run_js_script(generated_code)
             print(result) # Check the process
 
             if stderror_output == '':

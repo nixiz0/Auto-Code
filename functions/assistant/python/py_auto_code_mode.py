@@ -37,7 +37,7 @@ def py_auto_code(code, lang, model_use, session_state_updated, selected_file, se
             if lib:
                 pip_installer(lib)
             
-            result, stdout_output, stderror_output = run_script(code, TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
+            result, stdout_output, stderror_output = run_script(generated_code, TEMP_ENV_PATH, TEMP_SCRIPT_PATH)
             print(result) # Check the process
 
             if stderror_output == '':
