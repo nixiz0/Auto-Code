@@ -20,7 +20,7 @@ def llm_prompt(prompt, lang, model_use, session_state_updated, selected_file, se
             # print(response) # Check the entire response of the LLM
 
             # Extract and print only the code blocks
-            code_blocks = re.findall(r'```(?:python|javascript|html)?(.*?)```', response, re.DOTALL)
+            code_blocks = re.findall(r'```(?:python|javascript|sql|java|html|css|php|c|pp|csharp|vba)?(.*?)```', response, re.DOTALL)
             for code in code_blocks:
                 code = code.strip()
                 response = code

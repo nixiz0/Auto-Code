@@ -57,7 +57,7 @@ if not st.session_state[session_name] == []:
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
-code_lang = ['python', 'javascript', 'sql']
+code_lang = ['python', 'javascript', 'sql', 'java', 'html', 'css', 'php', 'c', 'pp', 'csharp', 'vba']
 code_language = st.selectbox('Langage Code' if lang == "Fr" else 'Code Language', code_lang)
 
 # -------- AUTO-CODE + PROMPT --------
@@ -83,26 +83,25 @@ if not selected_file:
     if session_state_updated and session_state_updated[-1]['role'] == 'assistant':
         code = session_state_updated[-1]["content"]
 
-    if code != "":
+    if code:
         # Use columns for layout
         run_btn, code_editor = st.columns([1, 15])
 
         with code_editor:
             code = st_ace(value=code, language=code_language, theme='cobalt', height=500)
 
-        with run_btn:
-            # Button to run the code
-            if st.button("▶️"):
-                if code_language == 'python':
-                    output = py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
-                elif code_language == 'javascript':
-                    output = js_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir) 
-                elif code_language == 'sql':
-                    pass
-                else: 
-                    output = "Ce langage de programmation n'est pas pris en compte" if lang == 'Fr' else \
-                             "This programming language is not taken into account"
-                st.sidebar.text_area("Terminal Output:", output, height=200)
+        if code_language in ['python', 'javascript']:
+            with run_btn:
+                # Button to run the code
+                if st.button("▶️"):
+                    if code_language == 'python':
+                        output = py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
+                    elif code_language == 'javascript':
+                        output = js_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir) 
+                    else: 
+                        output = "Ce langage de programmation n'est pas pris en compte" if lang == 'Fr' else \
+                                "This programming language is not taken into account"
+                    st.sidebar.text_area("Terminal Output:", output, height=200)
 
 # -------- LOAD CODE HISTORY --------
 if selected_file:
