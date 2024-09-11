@@ -8,6 +8,7 @@ from functions.get_model import get_model_names
 from functions.assistant.llm import llm_prompt
 from functions.assistant.python.py_auto_code_mode import py_auto_code
 from functions.assistant.javascript.js_auto_code_mode import js_auto_code
+from functions.assistant.html.html_open_code import website_open
 from functions.assistant.history_management.load_history import load_code_history
 from functions.assistant.history_management.btn_history import AppButton
 
@@ -90,7 +91,7 @@ if not selected_file:
         with code_editor:
             code = st_ace(value=code, language=code_language, theme='cobalt', height=500)
 
-        if code_language in ['python', 'javascript']:
+        if code_language in ['python', 'javascript', 'html']:
             with run_btn:
                 # Button to run the code
                 if st.button("▶️"):
@@ -98,6 +99,8 @@ if not selected_file:
                         output = py_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir)
                     elif code_language == 'javascript':
                         output = js_auto_code(code, lang, model_use, session_state_updated, selected_file, session_name, history_dir) 
+                    elif code_language == 'html':
+                        output = website_open(code)
                     else: 
                         output = "Ce langage de programmation n'est pas pris en compte" if lang == 'Fr' else \
                                 "This programming language is not taken into account"
