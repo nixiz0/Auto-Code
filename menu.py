@@ -57,7 +57,7 @@ if not st.session_state[session_name] == []:
 
 st.sidebar.markdown("<hr style='margin:5px;'>", unsafe_allow_html=True)
 
-code_lang = ['python', 'javascript', 'sql', 'java', 'html', 'css', 'php', 'c', 'pp', 'csharp', 'vba']
+code_lang = ['python', 'javascript', 'sql', 'java', 'html', 'css', 'php', 'c', 'cpp', 'csharp', 'vba']
 code_language = st.selectbox('Langage Code' if lang == "Fr" else 'Code Language', code_lang)
 
 # -------- AUTO-CODE + PROMPT --------
