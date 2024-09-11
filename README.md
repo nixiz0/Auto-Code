@@ -32,6 +32,8 @@ Run the **start-app.bat** and it will automatically install the application.
 
 8-/ If you want to seen old code generated and conversation you can click on the selectbox history and click on the conversation you want to review (you can change the code language at the top of the page to have synthaxic coloring according to the generated code)
 
+[If you want to modify a model and do some system instruction, you just have to click on the button that has a tools logo and follow instructions to create a specify model]
+
 
 ## Author
 
